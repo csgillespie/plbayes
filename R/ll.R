@@ -1,5 +1,10 @@
 biv_lognormal =  function(x, y, mu_1, mu_2, sigma_1, sigma_2, tau) 
 {
+  if(x < 0 || y < 0) return(0)
+ # else ans = compositions::dlnorm.rplus(c(x,y), c(mu_1, mu_2), matrix(c(1, 1.2, 1.2, 4), ncol=2))
+#  return(ans)
+  
+  
   A = (log(x) - mu_1)/sigma_1
   B = (log(y) - mu_2)/sigma_2
   1 / (2*pi*sigma_1 * sigma_2*sqrt(1-tau^2)*x*y) * 
@@ -37,7 +42,7 @@ ll_rounded = function(x_prop, pars, obser) {
       log(sum(dtpois(obs + -2:2, true[rounded[i]]))*p + dtpois(obs, true[rounded[i]])*(1-p))
   }
   
-  probs1+probs2 + probs3
+  probs1 + probs2 + probs3
 }
 
 
@@ -66,7 +71,7 @@ ll = function(x_prop, pars, obser) {
   ll = ll_pl(us[,"true"], pars[1:4]) +  
     ll_rounded(us[,"true"], pars[1:4], obser[obser$force=="us", "cas"]) 
   if(length(pars) > 4){
-    ll = + ll_pl(nat[,"true"], pars[5:8]) +  
+    ll = ll + ll_pl(nat[,"true"], pars[5:8]) +  
       ll_rounded(nat[,"true"], pars[5:8], obser[obser$force=="nat", "cas"])
   }
   ll
@@ -86,44 +91,43 @@ update_x = function(x_prop, obser) {
   x_prop
 }
 
-
-
 #' @export
 update_parameters = function(pars, cov_mat) {
   c1 = cov_mat[[1]]
   pert = mvrnorm(1L, numeric(3), c1[1:3, 1:3])
-  pars[1:3] = exp(log(pars[1:3]) + pert)
+  #pars[1:3] = exp(log(pars[1:3]) + pert)
+  pars[1:3] = pars[1:3] + pert
   pars[4] = pars[4] + rnorm(1, sd = c1[4, 4])
   if(length(pars) == 4) return(pars)
   c2 = cov_mat[[2]]  
   pert = mvrnorm(1L, numeric(3), c2[1:3, 1:3])
-  pars[5:7] = exp(log(pars[5:7]) + pert)
+  #pars[5:7] = exp(log(pars[5:7]) + pert)
+  pars[5:7]  = pars[5:7] + pert
   pars[8] = pars[8] + rnorm(1, sd = c2[4, 4])
   
   pars
 }
 
-
 #(-log(0.1)-0.001)/100 = 0.02
 #' @export
 get_prior = function(pars, ...) {
-  #if(any(pars[c(2:3,6:7)] < 0.001) || any(pars[c(2:3,6:7)] > 3)) return(-Inf)
+  
   mu_1 = 0;
   mu_2 = -3
   sigma_1 = 1
   sigma_2 = 2
   tau = sigma_1*sigma_2*0.3
   
-  (tau= tau/sigma_1/sigma_2)
+  (tau = tau/sigma_1/sigma_2)
   
   if(length(pars) == 4) {
-    dunif(pars[1], 1, 8, log=TRUE) + #alpha1
+    dunif(pars[1], 1.7, 3, log=TRUE) + #alpha1
       dunif(pars[4], 0, 1, log=TRUE) +#q1
-      dnorm(pars[2], mu_1, sigma_1, log=TRUE) + 
-      dnorm(pars[3], mu_1, sigma_1, log=TRUE) 
+      dlnorm(pars[2], mu_2, sigma_2, log=TRUE) + 
+      dlnorm(pars[3], mu_2, sigma_2, log=TRUE) 
   } else {
-    dunif(pars[1], 1, 8, log=TRUE) + #alpha1
-      dunif(pars[5], 1, 8, log=TRUE) + #alpha2
+    dunif(pars[1], 1.7, 4, log=TRUE) + #alpha1
+      dunif(pars[5], 1.7, 3, log=TRUE) + #alpha2
       dunif(pars[4], 0, 1, log=TRUE) +#q1
       dunif(pars[8], 0, 1, log=TRUE) +#q2
       log(biv_lognormal(pars[2], pars[6], mu_1, mu_2, sigma_1, sigma_2, tau)) + 

@@ -43,18 +43,18 @@ pdf(fname, width=8, height=4)
 mypalette(1)
 setnicepar(mfrow=c(1, 2))
 hist(est[,1], breaks="fd", 
-     ylim=c(0, 150), xlim=c(10000, 25000), 
+     ylim=c(0, 150), xlim=c(10000, 18000), 
      main=NULL, xlab="Total Casualities", 
      col="grey60", border="white")
 add_interval(est[,1], 140)
-text(25000, 138, "(a)")
+text(18000, 138, "(a)")
 
 hist(est[,3], breaks="fd", 
-     ylim=c(0, 150), xlim=c(35000, 150000), 
+     ylim=c(0, 200), xlim=c(35000, 150000), 
      main=NULL, xlab="Total Casualities", 
      col="grey60", border="white")
-add_interval(est[,3], 140)
-text(150000, 138, "(b)")
+add_interval(est[,3], 188)
+text(150000, 188, "(b)")
 dev.off()
 system(paste("pdfcrop", fname))
 

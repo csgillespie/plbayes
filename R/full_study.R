@@ -3,8 +3,8 @@ library("poweRlaw") # install.packages("poweRlaw")
 compiler::enableJIT(3) # Redundant in R 3.4.0
 source("R/mcmc.R")
 #library("MASS")
-data("native_american", package="poweRlaw")
-data("us_american", package="poweRlaw")
+data("native_american", package = "poweRlaw")
+data("us_american", package = "poweRlaw")
 
 ## Use previous run for tuning ----
 output_diff = readRDS(file="output/combined_mcmc.rds")[[1]]
@@ -13,33 +13,40 @@ o1 = output_diff
 
 ## US forces
 (p1 = colMeans(output_diff[,2:5]))
-cov_mat = suppressWarnings(cov(log(output_diff[, 2:5]))/4)
+cov_mat = suppressWarnings(cov(output_diff[, 2:5])/4)
 cov_mat[4,] = 0; cov_mat[,4] = 0; 
 cov_mat[4, 4] = 0.005
 c1 = cov_mat
 
 ## Native American
 (p2 = colMeans(output_diff[,6:9]))
-cov_mat = cov(log(output_diff[, 6:9]))/5
+cov_mat = cov(output_diff[, 6:9])/5
 cov_mat[4,] = 0; cov_mat[,4] = 0; 
 cov_mat[4, 4] = 0.05
 c2 = cov_mat
 
+# c1 = matrix(c(0.0042, -0.00032, -0.0011, -2.2e-05, 
+#                    -0.00032, 3e-05, 8.8e-05, -2.6e-07, 
+#                    -0.0011, 8.8e-05, 0.00041, 2.2e-05, 
+#                    -2.2e-05, -2.6e-07, 2.2e-05, 0.02), 
+#                  nrow=4)
+
 ## Combine cov_mats into a single list
 cov_mat = list(c1, c2)
-
+#output_diff = o$output
 ## Combine data into single object
 obser = data.frame(cas = c(sort(us_american$Cas), sort(native_american$Cas)), 
                force = rep(c("us", "nat"), c(NROW(us_american), NROW(native_american))))
 
 ## Initial starting values
-set.seed(4) # No idea why I choose 4. 
-N = 2100000;  thin = 100
+set.seed(42) 
+N = 3100000;  thin = 100
+#N = 20000;  thin = 1
 pars = c(p1, p2)
-o = mcmc(pars, cov_mat, obser,
-         N = N, thin = thin,  verbose=TRUE) 
+system.time(o <- mcmc(pars, cov_mat, obser,
+         N = N, thin = thin,  verbose=TRUE) )
 
-#saveRDS(o, file="output/combined_mcmc.rds")
+saveRDS(o, file="output/combined_mcmc.rds")
 #o = readRDS(file="output/combined_mcmc.rds")
 o1 = o[[1]]
 ## Sanity MCMC plots

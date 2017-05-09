@@ -15,26 +15,26 @@ w= h = 7/4
 pdf(fname, width=w*3, height=h*2)
 setnicepar(mfrow=c(2, 2))
 
-hist(o1[,2], breaks="fd", ylim=c(0, 500), 
+hist(o1[,2], breaks="fd", ylim=c(0, 600), 
      xlim=c(1.9, 2.5), main=NULL, xlab=expression(alpha), 
      col="grey60", border="white");
-add_interval(o1[,2], 450, pars[1], TRUE)
-text(2.45, 490, "(a)")
+add_interval(o1[,2], 550, pars[1], TRUE)
+text(2.45, 590, "(a)")
 
 hist(o1[,3], breaks="fd", 
-     ylim=c(0, 800),  xlim=c(0, 0.03), 
+     ylim=c(0, 820),  xlim=c(0, 0.025), 
      main=NULL, xlab=expression(lambda), 
      col="grey60", border="white");
 add_interval(o1[,3], 750, pars[2])
 text(pars[2], 760, "True value", col=3, adj = c(0, 0), cex=0.9)
-text(0.028, 750, "(b)")
+text(0.023, 750, "(b)")
 
 hist(o1[,4], breaks=60, 
      ylim=c(0, 600), 
-     xlim=c(0, 0.1), main=NULL, xlab=expression(mu), 
+     xlim=c(0, 0.12), main=NULL, xlab=expression(mu), 
      col="grey60", border="white");
 add_interval(o1[,4], 600, pars[3], FALSE)
-text(0.09, 600, "(c)")
+text(0.11, 600, "(c)")
 
 
 hist(o1[,5], breaks="fd", 

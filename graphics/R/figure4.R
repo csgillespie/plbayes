@@ -29,13 +29,12 @@ fname = "graphics/output/figure4.pdf"
 pdf(fname, width=4, height=4)
 setnicepar(mfrow=c(1, 1))
 
-hist(est[,1], breaks=80, 
-     ylim=c(0, 1500), 
-     xlim=c(30000, 150000), main=NULL, xlab="Total Casualities", 
+hist(est[,1], breaks="fd", 
+     ylim=c(0, 800), 
+     xlim=c(30000, 120000), main=NULL, xlab="Total Casualities", 
      col="grey60", border="white");
 true = sum(dd[[1]]$x)
-add_interval(est[,1], 1500, true)
-
+add_interval(est[,1], 800, true)
 dev.off()
 system(paste("pdfcrop", fname))
 

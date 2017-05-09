@@ -9,11 +9,11 @@ mcmc = function(pars, cov_mat, obser, N,
                 verbose=TRUE, initialise=NULL, ...) {
   ## rm is just me being defensive. Not actually needed.
   pars_cur = pars;rm(pars)
-
+  
   if(!is.list(cov_mat)) cov_mat = list(cov_mat)
   if(is.null(initialise)) initialise = obser
   if(!is.data.frame(initialise) && NCOL(initialise) !=2) stop("Initialise error")
-
+  
   x_cur = data.frame(force = initialise$force, true=initialise$cas, stringsAsFactors = FALSE)#, pois=x, rounded=x, types=types)
   x_prop = update_x(x_cur, obser)
   (log_ll_cur = ll(x_prop, pars_cur, obser))
@@ -32,19 +32,20 @@ mcmc = function(pars, cov_mat, obser, N,
   for(i in 2:N) {
     pars_prop = update_parameters(pars_cur, cov_mat)
     x_prop = update_x(x_cur, obser)
-    
-    log_ll = ll(x_prop, pars_prop, obser) 
     prior = get_prior(pars_prop)
-    
-    ratio = log_ll - log_ll_cur + prior - prior_cur + attr(x_prop, "trans")
 
-    if(is.finite(ratio) && ratio > log(runif(1))) {
-      log_ll_cur = log_ll
-      pars_cur = pars_prop
-      prior_cur = prior
-      x_cur = x_prop
-      accept = accept + 1
-    } 
+    if(is.finite(prior)) {
+      log_ll = ll(x_prop, pars_prop, obser)       
+      ratio = log_ll - log_ll_cur + prior - prior_cur + attr(x_prop, "trans")
+      
+      if(is.finite(ratio) && ratio > log(runif(1))) {
+        log_ll_cur = log_ll
+        pars_cur = pars_prop
+        prior_cur = prior
+        x_cur = x_prop
+        accept = accept + 1
+      } 
+    }
     
     if(!(i %% thin)) {
       output[i/thin,] = c(log_ll_cur, pars_cur)  
