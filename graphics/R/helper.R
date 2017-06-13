@@ -6,14 +6,14 @@ est_xmin = function(pars) {
 
 add_interval = function(d, top,true=NULL,  text=FALSE){
   qs = quantile(d, c(0.025, 0.975))
-  if(text)  text(qs[1], top+45, "95% interval", col=4, pos=4, cex=0.6)
-  segments(qs[1], top, qs[2], top, col=4)
-  segments(qs[1], top, qs[1], top-50, col=4, lty=3)
-  segments(qs[1], 0, qs[1], 50, col=4, lty=3)
-  segments(qs[2], top, qs[2], top-50, col=4, lty=3)
-  segments(qs[2], 0, qs[2], 50, col=4, lty=3)
+  if(text)  text(qs[1], top+45, "95% interval", pos=4, cex=0.7)
+  segments(qs[1], top, qs[2], top)
+  segments(qs[1], top, qs[1], top-50,  lty=3)
+  segments(qs[1], 0, qs[1], 50,lty=3)
+  segments(qs[2], top, qs[2], top-50,  lty=3)
+  segments(qs[2], 0, qs[2], 50,  lty=3)
   
-  if(!is.null(true))  points(true, top, pch=21, bg=3, col="white", cex=1.2)
+  if(!is.null(true))  points(true, top, pch=21,  cex=1.2)
 }
 
 setnicepar = function(mar=c(3,3,2,1), 

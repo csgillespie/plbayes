@@ -12,7 +12,7 @@ mypalette(1)
 
 fname = "graphics/output/figure3.pdf"
 w= h = 7/4
-pdf(fname, width=w*3, height=h*2)
+pdf(fname, width=w*4, height=h*3)
 setnicepar(mfrow=c(2, 2))
 
 hist(o1[,2], breaks="fd", ylim=c(0, 600), 
@@ -26,7 +26,7 @@ hist(o1[,3], breaks="fd",
      main=NULL, xlab=expression(lambda), 
      col="grey60", border="white");
 add_interval(o1[,3], 750, pars[2])
-text(pars[2], 760, "True value", col=3, adj = c(0, 0), cex=0.9)
+text(pars[2], 765, "True value",  adj = c(0, 0), cex=0.7)
 text(0.023, 750, "(b)")
 
 hist(o1[,4], breaks=60, 

@@ -16,16 +16,16 @@ pdf(fname, width=6, height=4)
 
 setnicepar()
 mypalette(1)
-plot(x, y1, type="l", col=4, 
+plot(x, y1, type="l", 
      ylim=c(0, 1), panel.first=grid(), 
      ylab="Pr(Observing a conflict)", 
      xlab="No. of Casualties in a Conflict")
-lines(x, y2, col=2, lty=2)
-lines(x, y3, col=3, lty=3)
+lines(x, y2, lty=2)
+lines(x, y3, lty=3)
 
-text(9.8, 0.9, expression(paste(mu, " = 1.0")), col=4)
-text(18, 0.65, expression(paste(mu, " = 0.1")), col=2)
-text(38, 0.24, expression(paste(mu, " = 0.01")), col=3)
+text(9.8, 0.9, expression(paste(mu, " = 1.0")))
+text(18, 0.65, expression(paste(mu, " = 0.1")))
+text(38, 0.26, expression(paste(mu, " = 0.01")))
 dev.off()
 system(paste("pdfcrop", fname))
 
