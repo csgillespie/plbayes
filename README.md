@@ -2,9 +2,22 @@
 
 This repository contains the __R__ code for the paper, 
 
-> Estimating the number of casualties in the American Indian war: a Bayesian analysis using the power law distribution
+> Estimating the number of casualties in the American Indian war: a Bayesian analysis using the power law distribution [[journal]](https://projecteuclid.org/euclid.aoas/1514430289) [[preprint]](https://arxiv.org/abs/1710.01662)
 
-This paper is currently under revision in Annals of Applied Statistics.
+
+
+```tex
+@article{Gillespie2017,
+  title={Estimating the number of casualties in the American Indian war: a Bayesian analysis using the power law distribution},
+  author={Gillespie, Colin S and others},
+  journal={The Annals of Applied Statistics},
+  volume={11},
+  number={4},
+  pages={2357--2374},
+  year={2017},
+  publisher={Institute of Mathematical Statistics}
+}
+```
 
 ## Data
 
